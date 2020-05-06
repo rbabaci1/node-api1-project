@@ -9,9 +9,17 @@ const users = [];
 server.use(express.json());
 
 server.post('/api/users', (req, res) => {
-  const reqs = req;
+  const user = req.body;
 
-  console.log(reqs);
+  if ('name' in user && 'bio' in user) {
+    user.id = shortid.generate();
+    users.push(user);
+    res.status(201).json(user);
+  } else {
+    res
+      .status(400)
+      .send({ errorMessage: 'Please provide name and bio for the user.' });
+  }
 });
 
 server.listen(PORT, () => {
