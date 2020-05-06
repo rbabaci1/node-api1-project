@@ -22,12 +22,17 @@ server.post('/api/users', (req, res) => {
           'There was an error while saving the user to the database',
       });
     }
+
     res.status(201).json(user);
   } else {
     res
       .status(400)
       .send({ errorMessage: 'Please provide name and bio for the user.' });
   }
+});
+
+server.get('/api/users', (req, res) => {
+  res.status(201).json(users);
 });
 
 server.listen(PORT, () => {
