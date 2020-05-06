@@ -6,8 +6,12 @@ const PORT = 5000;
 
 const users = [];
 
-server.get('/users', (req, res) => {
-  res.send('test');
+server.use(express.json());
+
+server.post('/api/users', (req, res) => {
+  const reqs = req;
+
+  console.log(reqs);
 });
 
 server.listen(PORT, () => {
