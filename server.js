@@ -13,7 +13,15 @@ server.post('/api/users', (req, res) => {
 
   if ('name' in user && 'bio' in user) {
     user.id = shortid.generate();
+    const prevLength = users.length;
+
     users.push(user);
+    if (prevLength === users.length) {
+      res.status(500).send({
+        errorMessage:
+          'There was an error while saving the user to the database',
+      });
+    }
     res.status(201).json(user);
   } else {
     res
