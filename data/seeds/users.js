@@ -1,7 +1,7 @@
-exports.seed = function(knex) {
+exports.seed = function (knex) {
   return knex('users')
     .truncate()
-    .then(function() {
+    .then(function () {
       return knex('users').insert([
         {
           name: 'Samwise Gamgee',
@@ -10,6 +10,10 @@ exports.seed = function(knex) {
         {
           name: 'Frodo Baggins',
           bio: 'The ring bearer',
+        },
+        {
+          name: 'Rabah Babaci',
+          bio: 'Hello there!',
         },
       ]);
     });

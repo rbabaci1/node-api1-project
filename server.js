@@ -1,30 +1,27 @@
 const express = require('express');
 const shortid = require('shortid');
-const { find, findById, insert, update, remove } = require('./data/db');
 
 const server = express();
+const { find, findById, insert, update, remove } = require('./data/db.js');
 const PORT = 5000;
-
-let users = [];
 
 server.use(express.json());
 
-server.post('/api/users', (req, res) => {
+server.post('/api/users', async (req, res) => {
   const user = req.body;
 
   if ('name' in user && 'bio' in user) {
-    user.id = shortid.generate();
-    const prevLength = users.length;
+    try {
+      const { id } = await insert(user);
+      const addedUser = await findById(id);
 
-    users.push(user);
-    if (prevLength === users.length) {
+      res.status(201).json(addedUser);
+    } catch (err) {
       res.status(500).json({
         errorMessage:
           'There was an error while saving the user to the database',
       });
     }
-
-    res.status(201).json(user);
   } else {
     res
       .status(400)
@@ -32,14 +29,16 @@ server.post('/api/users', (req, res) => {
   }
 });
 
-server.get('/api/users', (req, res) => {
+server.get('/api/users', async (req, res) => {
+  const users = await find();
+
   res.status(200).json(users);
 });
 
-server.get('/api/users/:id', (req, res) => {
+server.get('/api/users/:id', async (req, res) => {
   const { id } = req.params;
 
-  const found = users.find((user) => user.id === id);
+  const found = await findById(Number(id));
 
   if (found) {
     res.status(200).json(found);
@@ -50,20 +49,8 @@ server.get('/api/users/:id', (req, res) => {
   }
 });
 
-server.delete('/api/users/:id', (req, res) => {
+server.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
-
-  const found = users.find((user) => user.id === id);
-
-  if (found) {
-    users = users.filter((user) => user.id !== found.id);
-
-    res.status(200).json(found);
-  } else {
-    res
-      .status(404)
-      .json({ message: 'The user with the specified ID does not exist.' });
-  }
 });
 
 server.listen(PORT, () => {

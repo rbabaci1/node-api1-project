@@ -1,5 +1,5 @@
 const knex = require('knex');
-const knexConfig = require('../knexfile.js');
+const knexConfig = require('../knexfile');
 const db = knex(knexConfig.development);
 
 module.exports = {
@@ -23,17 +23,13 @@ function findById(id) {
 function insert(user) {
   return db('users')
     .insert(user)
-    .then(ids => ({ id: ids[0] }));
+    .then((ids) => ({ id: ids[0] }));
 }
 
 function update(id, user) {
-  return db('users')
-    .where('id', Number(id))
-    .update(user);
+  return db('users').where('id', Number(id)).update(user);
 }
 
 function remove(id) {
-  return db('users')
-    .where('id', Number(id))
-    .del();
+  return db('users').where('id', Number(id)).del();
 }
