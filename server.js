@@ -9,21 +9,13 @@ let users = [];
 server.use(express.json());
 
 server.post('/api/users', (req, res) => {
-  const user = req.body;
+  const newUser = req.body;
 
-  if ('name' in user && 'bio' in user) {
-    user.id = shortid.generate();
-    const prevLength = users.length;
+  if ('name' in newUser && 'bio' in newUser) {
+    newUser.id = shortid.generate();
 
-    users.push(user);
-    if (prevLength === users.length) {
-      res.status(500).json({
-        errorMessage:
-          'There was an error while saving the user to the database',
-      });
-    }
-
-    res.status(201).json(user);
+    users.push(newUser);
+    res.status(201).json(newUser);
   } else {
     res
       .status(400)
