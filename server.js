@@ -1,14 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const { find, findById, insert, update, remove } = require('./data/db.js');
-
-const server = express();
+const app = express();
 const PORT = 5000;
 
-server.use(express.json());
-server.use(cors());
+app.use(express.json());
+app.use(cors());
 
-server.post('/api/users', async (req, res) => {
+app.post('/api/users', async (req, res) => {
   const user = req.body;
 
   if ('name' in user && 'bio' in user) {
@@ -30,7 +29,7 @@ server.post('/api/users', async (req, res) => {
   }
 });
 
-server.get('/api/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
     const users = await find();
 
@@ -42,7 +41,7 @@ server.get('/api/users', async (req, res) => {
   }
 });
 
-server.get('/api/users/:id', async (req, res) => {
+app.get('/api/users/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -62,7 +61,7 @@ server.get('/api/users/:id', async (req, res) => {
   }
 });
 
-server.delete('/api/users/:id', async (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -81,7 +80,7 @@ server.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-server.put('/api/users/:id', async (req, res) => {
+app.put('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -111,6 +110,6 @@ server.put('/api/users/:id', async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
