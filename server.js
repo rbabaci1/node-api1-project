@@ -17,7 +17,7 @@ server.post('/api/users', (req, res) => {
 
     users.push(user);
     if (prevLength === users.length) {
-      res.status(500).send({
+      res.status(500).json({
         errorMessage:
           'There was an error while saving the user to the database',
       });
@@ -33,6 +33,20 @@ server.post('/api/users', (req, res) => {
 
 server.get('/api/users', (req, res) => {
   res.status(201).json(users);
+});
+
+server.get('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+
+  const found = users.find((user) => user.id === id);
+
+  if (found) {
+    res.status(200).json(found);
+  } else {
+    res
+      .status(404)
+      .json({ message: 'The user with the specified ID does not exist.' });
+  }
 });
 
 server.listen(PORT, () => {
