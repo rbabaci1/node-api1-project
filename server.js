@@ -44,14 +44,20 @@ server.get('/api/users', async (req, res) => {
 server.get('/api/users/:id', async (req, res) => {
   const { id } = req.params;
 
-  const found = await findById(Number(id));
+  try {
+    const found = await findById(id);
 
-  if (found) {
-    res.status(200).json(found);
-  } else {
-    res
-      .status(404)
-      .json({ message: 'The user with the specified ID does not exist.' });
+    if (found) {
+      res.status(200).json(found);
+    } else {
+      res
+        .status(404)
+        .json({ message: 'The user with the specified ID does not exist.' });
+    }
+  } catch (err) {
+    res.status(500).json({
+      errorMessage: 'The users information could not be retrieved.',
+    });
   }
 });
 
