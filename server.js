@@ -30,9 +30,15 @@ server.post('/api/users', async (req, res) => {
 });
 
 server.get('/api/users', async (req, res) => {
-  const users = await find();
+  try {
+    const users = await find();
 
-  res.status(200).json(users);
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({
+      errorMessage: 'The users information could not be retrieved.',
+    });
+  }
 });
 
 server.get('/api/users/:id', async (req, res) => {
