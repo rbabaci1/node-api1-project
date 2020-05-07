@@ -63,6 +63,21 @@ server.get('/api/users/:id', async (req, res) => {
 
 server.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
+
+  try {
+    const found = await findById(id);
+
+    if (found) {
+      await remove(id);
+      res.status(200).json({ deleted: found });
+    } else {
+      res
+        .status(404)
+        .json({ message: 'The user with the specified ID does not exist.' });
+    }
+  } catch (err) {
+    res.status(500).json({ errorMessage: 'The user could not be removed' });
+  }
 });
 
 server.listen(PORT, () => {
