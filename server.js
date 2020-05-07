@@ -4,7 +4,7 @@ const shortid = require('shortid');
 const server = express();
 const PORT = 5000;
 
-const users = [];
+let users = [];
 
 server.use(express.json());
 
@@ -32,7 +32,7 @@ server.post('/api/users', (req, res) => {
 });
 
 server.get('/api/users', (req, res) => {
-  res.status(201).json(users);
+  res.status(200).json(users);
 });
 
 server.get('/api/users/:id', (req, res) => {
@@ -41,6 +41,22 @@ server.get('/api/users/:id', (req, res) => {
   const found = users.find((user) => user.id === id);
 
   if (found) {
+    res.status(200).json(found);
+  } else {
+    res
+      .status(404)
+      .json({ message: 'The user with the specified ID does not exist.' });
+  }
+});
+
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+
+  const found = users.find((user) => user.id === id);
+
+  if (found) {
+    users = users.filter((user) => user.id !== found.id);
+
     res.status(200).json(found);
   } else {
     res
