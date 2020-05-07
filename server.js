@@ -1,6 +1,6 @@
-// implement your API here
 const express = require('express');
 const shortid = require('shortid');
+const { find, findById, insert, update, remove } = require('./data/db');
 
 const server = express();
 const PORT = 5000;
