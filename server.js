@@ -61,22 +61,21 @@ server.put('/api/users/:id', (req, res) => {
   const { id } = req.params;
   const updatedUser = req.body;
 
-  const foundIndex = users.findIndex((user) => user.id === id);
+  if ('name' in updatedUser && 'bio' in updatedUser) {
+    const foundIndex = users.findIndex((user) => user.id === id);
 
-  if (foundIndex !== -1) {
-    if ('name' in updatedUser && 'bio' in updatedUser) {
-      users[foundIndex] = { id, ...updatedUser };
-
+    if (foundIndex !== -1) {
+      users[foundIndex] = { ...updatedUser, id };
       res.status(200).json(users[foundIndex]);
     } else {
       res
-        .status(400)
-        .json({ errorMessage: 'Please provide name and bio for the user.' });
+        .status(404)
+        .json({ message: 'The user with the specified ID does not exist.' });
     }
   } else {
     res
-      .status(404)
-      .json({ message: 'The user with the specified ID does not exist.' });
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
   }
 });
 
