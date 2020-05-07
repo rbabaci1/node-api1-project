@@ -49,7 +49,7 @@ server.delete('/api/users/:id', (req, res) => {
   if (found) {
     users = users.filter((user) => user.id !== found.id);
 
-    res.status(200).json(found);
+    res.status(200).json({ deleted: found });
   } else {
     res
       .status(404)
