@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const { find, findById, insert, update, remove } = require('./data/db.js');
 
 const server = express();
 const PORT = 5000;
 
 server.use(express.json());
+server.use(cors());
 
 server.post('/api/users', async (req, res) => {
   const user = req.body;
