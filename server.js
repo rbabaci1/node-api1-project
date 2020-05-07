@@ -65,6 +65,29 @@ server.delete('/api/users/:id', (req, res) => {
   }
 });
 
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedUser = req.body;
+
+  const foundIndex = users.findIndex((user) => user.id === id);
+
+  if (foundIndex !== -1) {
+    if ('name' in updatedUser && 'bio' in updatedUser) {
+      users[foundIndex] = { id, ...updatedUser };
+
+      res.status(200).json(users[foundIndex]);
+    } else {
+      res
+        .status(400)
+        .json({ errorMessage: 'Please provide name and bio for the user.' });
+    }
+  } else {
+    res
+      .status(404)
+      .json({ message: 'The user with the specified ID does not exist.' });
+  }
+});
+
 server.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
